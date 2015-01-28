@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/angularIntellij.iml" filepath="$PROJECT_DIR$/angularIntellij.iml" />
+      <module fileurl="file://$PROJECT_DIR$/angularNonsense.iml" filepath="$PROJECT_DIR$/angularNonsense.iml" />
     </modules>
   </component>
 </project>
