@@ -6,35 +6,35 @@
 // [  89.07511089  102.23344158   99.40623555  101.12356061  117.28880854
 //    125.3285453    89.50526668   72.32998573   96.34697385  107.97372603]
 
-var clapDelays = [89.07511089,  102.23344158,   99.40623555,  101.12356061,  117.28880854,
-    125.3285453,    89.50526668,   72.32998573,   96.34697385,  107.97372603];
-var volumes = [0.3223254,   0.75143339,  0.47993786, 0.9172416,   0.58518288,0.3223254,   0.75143339,  0.47993786, 0.9172416,   0.58518288];
+var clapDelays = [89.07511089, 102.23344158, 99.40623555, 101.12356061, 117.28880854,
+    125.3285453, 89.50526668, 72.32998573, 96.34697385, 107.97372603];
+var volumes = [0.3223254, 0.75143339, 0.47993786, 0.9172416, 0.58518288, 0.3223254, 0.75143339, 0.47993786, 0.9172416, 0.58518288];
 
 //from https://gist.github.com/manast/1185904
-function interval(duration, fn){
-    this.baseline = undefined
+function interval(duration, fn) {
+    this.baseline = undefined;
 
-    this.run = function(){
-        if(this.baseline === undefined){
-            this.baseline = new Date().getTime()
+    this.run = function () {
+        if (this.baseline === undefined) {
+            this.baseline = new Date().getTime();
         }
         fn()
-        var end = new Date().getTime()
-        this.baseline += duration
+        var end = new Date().getTime();
+        this.baseline += duration;
 
         var nextTick = duration - (end - this.baseline)
-        if(nextTick<0){
-            nextTick = 0
+        if (nextTick < 0) {
+            nextTick = 0;
         }
-        (function(i){
-            i.timer = setTimeout(function(){
-                i.run(end)
-            }, nextTick)
-        }(this))
-    }
+        (function (i) {
+            i.timer = setTimeout(function () {
+                i.run(end);
+            }, nextTick);
+        }(this));
+    };
 
-    this.stop = function(){
-        clearTimeout(this.timer)
+    this.stop = function () {
+        clearTimeout(this.timer);
     }
 }
 
@@ -52,46 +52,41 @@ angular.module('myApp.claps', ['ngRoute'])
     .controller('ClapsCtrl', ['$scope', function ($scope) {
 
 
-
-        $scope.timer = new interval(50, function(){
+        $scope.timer = new interval(50, function () {
             console.log(new Date().getTime())
         })
-        //$scope.timer.run()
-
 
         $scope.claps = [];
         $scope.playing = false;
-        for(var i = 0; i < clapDelays.length;i++){
+        for (var i = 0; i < clapDelays.length; i++) {
             $scope.claps[i] = document.createElement('audio');
             $scope.claps[i].src = 'media/clap-hall-01.mp3';
             $scope.claps[i].volume = volumes[i];
         }
 
         $scope.play = function () {
-            for(var i = 0; i < clapDelays.length;i++){
-                (function(_i){setTimeout(function(){
-                    if($scope.claps[_i]) {
-                        $scope.claps[_i].play();
-                    }
-                },clapDelays[_i]);})(i);
+            for (var i = 0; i < clapDelays.length; i++) {
+                (function (_i) {
+                    setTimeout(function () {
+                        if ($scope.claps[_i]) {
+                            $scope.claps[_i].play();
+                        }
+                    }, clapDelays[_i]);
+                })(i);
 
             }
-
-            setTimeout($scope.play, 600);
 
             $scope.playing = true;
         };
         $scope.stop = function () {
-            for(var i = 0; i < clapDelays.length;i++){
-                $scope.claps[i].pause();
-            }
+
             $scope.playing = false;
         };
-        /*$scope.claps[0].addEventListener('ended', function () {
-            console.log("got an ended event");
-            $scope.$apply(function () {
-                $scope.stop()
-            });
-        });*/
+        $scope.claps[0].addEventListener('ended', function () {
+         console.log("got an ended event");
+         $scope.$apply(function () {
+            $scope.stop()
+         });
+         });
 
     }]);
